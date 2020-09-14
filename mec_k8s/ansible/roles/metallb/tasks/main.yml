@@ -1,0 +1,25 @@
+---
+  - name: "Kubernetes Apps | Lay Down MetalLB"
+    template: { src: "{{ item }}.j2", dest: "{{ kube_config_dir }}/{{ item }}" }
+    with_items: ["metallb-ns.yml","metallb.yml", "metallb-config.yml"]
+    register: "rendering"
+    when:
+      - "inventory_hostname == groups['kube-master'][0]"
+
+  - name: "Kubernetes Apps | Install and configure MetalLB"
+    kube:
+      name: "MetalLB"
+      kubectl: "{{ bin_dir }}/kubectl"
+      filename: "{{ kube_config_dir }}/{{ item.item }}"
+      state: "{{ item.changed | ternary('latest','present') }}"
+    with_items: "{{ rendering.results }}"
+    when:
+      - "inventory_hostname == groups['kube-master'][0]"
+
+  # TODO: Make this declarative
+  - name: "Kubernetes Apps | Install and configure MetalLB memberlist secret"
+    shell: kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+    register: create_secret_result
+    failed_when: "create_secret_result.stderr and 'AlreadyExists' not in create_secret_result.stderr"
+    when:
+      - "inventory_hostname == groups['kube-master'][0]"

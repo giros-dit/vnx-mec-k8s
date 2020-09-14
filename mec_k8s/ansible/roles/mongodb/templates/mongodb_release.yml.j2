@@ -1,0 +1,21 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: mongodb
+  namespace: default
+spec:
+  chart:
+    repository: https://charts.bitnami.com/bitnami
+    name: mongodb
+    version: 9.1.2
+  values:
+    architecture: standalone
+    useStatefulSet: true
+    arbiter:
+        enabled: false
+    persistence:
+        enabled: false
+    auth:
+        enabled: false
+    service:
+        type: LoadBalancer

@@ -1,0 +1,16 @@
+---
+  - name: Install BIRD daemon
+    package: 
+      name: bird
+      state: present
+      update_cache: true
+
+  - name: Copy BIRD configuration for VNX scenario
+    template:
+      src: bird.conf.j2
+      dest: /etc/bird/bird.conf
+
+  - name: Restart BIRD daemon to apply configuration
+    service:
+      name: bird
+      state: restarted

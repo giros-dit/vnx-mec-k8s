@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helm-wrapper-deployment
+  labels:
+    app: helm-wrapper
+spec:
+  selector:
+    matchLabels:
+      app: helm-wrapper
+  template:
+    metadata:
+      labels:
+        app: helm-wrapper
+    spec:
+      serviceAccount: helm-wrapper
+      containers:
+      - name: helm-wrapper
+        image: localhost:5000/helm-wrapper
+        ports:
+        - containerPort: 80

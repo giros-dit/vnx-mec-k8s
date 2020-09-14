@@ -1,0 +1,17 @@
+---
+  - name: "Kubernetes Apps | Lay Down Helm Operator 1.1 manifests"
+    template: { src: "{{ item }}.j2", dest: "{{ kube_config_dir }}/{{ item }}" }
+    with_items: ["crds.yml", "ns.yml", "rbac.yml", "deployment.yml"]
+    register: "rendering"
+    when:
+      - "inventory_hostname == groups['kube-master'][0]"
+
+  - name: "Kubernetes Apps | Install and configure Helm Operator"
+    kube:
+      name: "Helm Operator 1.1"
+      kubectl: "{{ bin_dir }}/kubectl"
+      filename: "{{ kube_config_dir }}/{{ item.item }}"
+      state: "{{ item.changed | ternary('latest','present') }}"
+    with_items: "{{ rendering.results }}"
+    when:
+      - "inventory_hostname == groups['kube-master'][0]"
