@@ -2,13 +2,13 @@
 
 VNX scenario that deploys a production-ready three-node Kubernetes cluster using [kubespray](https://kubespray.io/#/) utilities.
 
-![kubespray](tutorial_kubespray/docs/kubespray-logo.png)
+![kubespray](mec_k8s/docs/kubespray-logo.png)
 
 By default Calico network plugin is used.
 
 ## Scenario topology
 
-![VNX tutorial_kubespray scenario](tutorial_kubespray/docs/scenario.png)
+![VNX mec_k8s scenario](mec_k8s/docs/scenario.png)
 
 K8s nodes are deployed as KVM virtual machines whereas r1 and h1 are LXC containers. They all run Ubuntu LTS 18.04.
 
@@ -26,7 +26,7 @@ K8s nodes are deployed as KVM virtual machines whereas r1 and h1 are LXC contain
 Install Ansible among other utilities needed by kubespray
 
 ```bash
-cd tutorial_kubespray/ansible/kubespray
+cd mec_k8s/ansible/kubespray
 sudo pip3 install -r requirements.txt
 ```
 
@@ -35,14 +35,14 @@ sudo pip3 install -r requirements.txt
 First of all deploy VNX scenario:
 
 ```bash
-cd tutorial_kubespray
-sudo vnx -f tutorial_kubespray.xml -v --create
+cd mec_k8s
+sudo vnx -f mec_k8s.xml -v --create
 ```
 
 Then run ansible playbook to setup a Kubernetes cluster on the three virtual machines:
 
 ```bash
-cd tutorial_kubespray/ansible
+cd mec_k8s/ansible
 ansible-playbook playbooks/site.yml
 ```
 
@@ -52,7 +52,7 @@ The execution of ansible playbook will take 10 minutes roughly. Once this playbo
 
 ### Node Management
 
-VNX creates a point-to-point link for management access and dynamically builds an SSH config file for the scenario. Such file can be found at `$HOME/.ssh/config.d/vnx/tutorial_kubespray`. As a result, our Kubernetes nodes and the remaining network elements can be easily accessed as follows:
+VNX creates a point-to-point link for management access and dynamically builds an SSH config file for the scenario. Such file can be found at `$HOME/.ssh/config.d/vnx/mec_k8s`. As a result, our Kubernetes nodes and the remaining network elements can be easily accessed as follows:
 
 ```bash
 # Master node
@@ -90,6 +90,6 @@ Helm client is installed in the master node.
 To destroy the VNX scenario, run the following command:
 
 ```bash
-cd tutorial_kubespray
-sudo vnx -f tutorial_kubespray.xml -v --destroy
+cd mec_k8s
+sudo vnx -f mec_k8s.xml -v --destroy
 ```
