@@ -2,7 +2,7 @@
 
 VNX scenario that deploys a cloud native-oriented MEC platform which is aligned with ETSI ISG MEC reference architecture. The scenario simulates a MEC Host that leverages Kubernetes as its Virtualization Infrastructure Manager(VIM). Additionally, Kubernetes fulfills MEPM functionalities by utilizing our proposed ETSI-compliant mechanism based on Helm for MEC Application package management and life-cycle management.
 
-The MEC Host nodes are attached to a router that provides connectivity to the MEC Orchestrator (MEO). User's host machine is connected to the same network, thus enabling users to interact with the MEC platform from the point of view of the MEO.
+The MEC Host nodes are attached to a router that provides connectivity to the MEC Orchestrator (MEO). User's host machine is connected to the same network, thus enabling users to play the role of OSS interacting with the MEO and the MEPM.
 
 For the sake of simplicity, the Kubernetes cluster is composed of a master and a worker node. Only the worker node is scheduled for instantiating workloads, leaving the master node just for control plane and system services. It is left for future works expanding the cluster to two or more worker nodes in order to benefit from the HA capabilites that Kubernetes offers.
 
