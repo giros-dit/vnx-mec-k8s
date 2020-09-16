@@ -27,6 +27,15 @@ helm_releases = [
         }
     }
 ]
+
+# Parsing values from AppPkgInfo object 
+#
+# {
+#     "chart": "appPkgInfo['sofwareImages']",
+#     "values": "appPkgInfo['userDefinedData']",
+#     "releaseName": "appPkgInfo['appName']"
+# }
+
 preload_helm_releases()
 
 
@@ -59,12 +68,6 @@ class CreateAppInstanceRequest(BaseModel):
     appDId: str
     appInstanceName: str
     appInstanceDescription: str
-
-
-class InstantiateAppRequest(BaseModel):
-    virtualComputeDescriptor: Optional[list] = None
-    virtualStorageDescriptor: Optional[list] = None
-    selectedMECHostInfo: Optional[str] = "Test MEC Host"
 
 
 class InstantiationState(str, Enum):
@@ -143,8 +146,7 @@ async def get_app_instance(appInstanceId: str):
 @app.post("/app_lcm/v1/app_instances/{appInstanceId}/instantiate",
           status_code=status.HTTP_202_ACCEPTED)
 async def instantiate_app_instance(
-                appInstanceId: str,
-                instantiateAppRequest: InstantiateAppRequest):
+                appInstanceId: str):
     app_instance_info = get_app_instance_info(appInstanceId)
     if app_instance_info is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

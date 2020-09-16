@@ -17,5 +17,6 @@ spec:
       containers:
       - name: helmec
         image: localhost:5000/helmec
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
