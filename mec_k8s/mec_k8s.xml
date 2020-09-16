@@ -80,7 +80,7 @@ SPAIN
     </if>
   </vm>
 
-  <vm name="MEO" type="lxc" arch="x86_64">
+  <vm name="meo" type="lxc" arch="x86_64">
     <mem>1G</mem>
     <filesystem type="cow">/usr/share/vnx/filesystems/rootfs_lxc_ubuntu64</filesystem>
     <forwarding type="ip" />

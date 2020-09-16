@@ -2,7 +2,7 @@
 - name: Copy FastAPi libraries
   copy:
     src: "../files/"
-    dest: "./helm-wrapper"
+    dest: "./helmec"
   when:
     - "inventory_hostname == groups['kube-node'][0]"  
 
@@ -21,27 +21,27 @@
   when:
     - "inventory_hostname == groups['kube-node'][0]"  
 
-- name: Tag and push Helm-wrapper image to local registry
+- name: Tag and push Helmec image to local registry
   docker_image:
-    name: helm-wrapper
-    repository: localhost:5000/helm-wrapper
+    name: helmec
+    repository: localhost:5000/helmec
     push: yes
     source: build
     build:
-      path: "./helm-wrapper"
+      path: "./helmec"
   when:
     - "inventory_hostname == groups['kube-node'][0]"  
 
-- name: Kubernetes Apps | Lay Down helm-wrapper manifests
+- name: Kubernetes Apps | Lay Down helmec manifests
   template: { src: "{{ item }}.j2", dest: "{{ kube_config_dir }}/{{ item }}" }
   with_items: ["rbac.yml", "deployment.yml", "svc.yml"]
   register: "rendering"
   when:
     - "inventory_hostname == groups['kube-master'][0]"
 
-- name: Kubernetes Apps | Install and configure RBAC for helm-wrapper
+- name: Kubernetes Apps | Install and configure RBAC for helmec
   kube:
-    name: "Helm-wrapper rbac"
+    name: "Helmec rbac"
     kubectl: "{{ bin_dir }}/kubectl"
     filename: "{{ kube_config_dir }}/{{ item.item }}"
     state: "{{ item.changed | ternary('latest','present') }}"

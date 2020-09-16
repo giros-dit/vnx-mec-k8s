@@ -33,5 +33,10 @@
 
   - hosts: k8s-cluster
     roles:
-      - helm-wrapper
-    tags: helm-wrapper
+      - helmec
+    tags: helmec
+
+  - hosts: meo
+    roles:
+      - meo
+    tags: meo

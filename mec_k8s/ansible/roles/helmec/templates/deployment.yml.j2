@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helmec-deployment
+  labels:
+    app: helmec
+spec:
+  selector:
+    matchLabels:
+      app: helmec
+  template:
+    metadata:
+      labels:
+        app: helmec
+    spec:
+      serviceAccount: helmec
+      containers:
+      - name: helmec
+        image: localhost:5000/helmec
+        ports:
+        - containerPort: 80

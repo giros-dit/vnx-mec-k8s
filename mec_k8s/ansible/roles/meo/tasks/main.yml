@@ -1,0 +1,15 @@
+---
+  - name: Install MongoDB
+    package: 
+      name: mongodb
+      state: present
+      update_cache: true
+
+  - name: Ensure MongoDB service is running
+    service:
+      name: mongod
+      state: started
+
+  - name: Install FastAPI and dependencies
+    pip:
+      requirements: "../files/requirements.txt"
