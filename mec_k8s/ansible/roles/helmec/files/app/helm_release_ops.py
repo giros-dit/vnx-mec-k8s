@@ -1,7 +1,7 @@
 from kubernetes import client, config
 
 
-def create_release(repository, name, version):
+def create_release(repository, name, version, values):
     config.load_incluster_config()
 
     group = "helm.fluxcd.io"
@@ -23,7 +23,8 @@ def create_release(repository, name, version):
                 "name": name,
                 "version": version
             },
-            "wait": True
+            "wait": True,
+            "values": values
         }
     }
 

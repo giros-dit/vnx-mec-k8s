@@ -149,7 +149,8 @@ async def instantiate_app_instance(
         create_release(
             repository=helm_release.software_images['repository'],
             name=helm_release.software_images['name'],
-            version=helm_release.software_images['version'])
+            version=helm_release.software_images['version'],
+            values=helm_release.user_defined_data)
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="MEC Application could not be instantiated.")
