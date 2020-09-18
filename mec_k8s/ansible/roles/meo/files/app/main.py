@@ -10,7 +10,12 @@ from bson.objectid import ObjectId
 client = MongoClient('mongodb://localhost:27017')
 db = client.meo
 
+
 # MongoDB operations
+def delete_app_package_info(appPkgId: str):
+    db.app_pkgs_info.delete_one({'_id': ObjectId(appPkgId)})
+
+
 def get_app_packages_info(appDId):
     filter = None
     if appDId:
@@ -89,6 +94,19 @@ async def onboard_app_package(createAppPkg: CreateAppPkg):
         appDId=str(app_pkg_id),
         **app_pkg_info
     )
+
+@app.delete("/app_pkgm/v1/app_packages/{appPkgId}",
+            status_code=status.HTTP_204_NO_CONTENT)
+async def delete_app_package(appPkgId: str):
+    app_package_info = get_app_packages_info(appPkgId)[0]
+    if app_package_info is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="App instance not found")
+    if app_package_info.get('usageState') == UsageState.IN_USE.value:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail="Cannot delete MEC Application package in 'IN_USE' state")
+    delete_app_package_info(appPkgId)
+
 
 @app.get("/app_pkgm/v1/app_packages", response_model=List[AppPkgInfo],
          status_code=status.HTTP_200_OK)
