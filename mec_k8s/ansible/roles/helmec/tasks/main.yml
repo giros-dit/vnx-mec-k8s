@@ -23,10 +23,10 @@
 
 - name: Tag and push Helmec image to local registry
   docker_image:
-    name: helmec
-    repository: localhost:5000/helmec
+    name: localhost:5000/helmec
     push: yes
     source: build
+    force_source: yes
     build:
       path: "./helmec"
   when:

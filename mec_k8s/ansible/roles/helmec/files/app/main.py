@@ -3,8 +3,10 @@ from fastapi import FastAPI, status, HTTPException
 from helm_release_ops import create_release, delete_release
 from pydantic import BaseModel
 from pymongo import MongoClient
-from typing import Optional, List
+from typing import List
 from bson.objectid import ObjectId
+
+import meo_client
 
 
 # Initialize MongoDB
@@ -28,24 +30,10 @@ helm_releases = [
     }
 ]
 
-# Parsing values from AppPkgInfo object 
-#
-# {
-#     "chart": "appPkgInfo['sofwareImages']",
-#     "values": "appPkgInfo['userDefinedData']",
-#     "releaseName": "appPkgInfo['appName']"
-# }
-
 preload_helm_releases()
 
 
 # MongoDB operations
-def get_helm_release(appDId: str):
-    helm_release = db.helm_releases.find_one(
-                    {'appDId': appDId})
-    return helm_release
-
-
 def delete_app_instance_info(appInstanceId: str):
     app_instance_info = db.app_instances_info.delete_one(
                     {'_id': ObjectId(appInstanceId)})
