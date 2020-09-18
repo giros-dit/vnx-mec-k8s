@@ -7,30 +7,13 @@ from typing import List
 from bson.objectid import ObjectId
 
 import meo_client
+from meo_client.rest import ApiException
 
+MEO_ADDRESS = "10.10.20.10"
 
 # Initialize MongoDB
 client = MongoClient('mongodb://default-mongodb:27017')
 db = client.mepm
-
-
-def preload_helm_releases():
-    db.helm_releases.drop()
-    db.helm_releases.insert_many(helm_releases)
-
-
-helm_releases = [
-    {
-        "appDId": "1",
-        "helm_chart": {
-            "repository": "https://kubernetes-charts.storage.googleapis.com",
-            "name": "grafana",
-            "version": "5.1.2"
-        }
-    }
-]
-
-preload_helm_releases()
 
 
 # MongoDB operations
@@ -70,6 +53,24 @@ class AppInstanceInfo(BaseModel):
     appDId: str
     appPkgId: str
     instantiationState: InstantiationState
+
+
+def get_helm_release(appDId: str):
+    # Defining the host is optional and defaults to http://localhost
+    # See configuration.py for a list of all supported configuration parameters.
+    configuration = meo_client.Configuration(host="http://%s" % MEO_ADDRESS)
+
+    # Enter a context with an instance of the API client
+    with meo_client.ApiClient(configuration) as api_client:
+        # Create an instance of the API class
+        api_instance = meo_client.DefaultApi(api_client)
+        try:
+            # Get App Package
+            api_response = api_instance.get_app_packages_app_pkgm_v1_app_packages_get(app_d_id=appDId)
+            return api_response[0]
+        except ApiException as e:
+            print("Exception when calling DefaultApi->get_app_packages_app_pkgm_v1_app_packages_get: %s\n" % e)
+
 
 # FastAPI specific code
 app = FastAPI(
@@ -146,15 +147,16 @@ async def instantiate_app_instance(
     helm_release = get_helm_release(appDId)
     try:
         create_release(
-            repository=helm_release['repository'],
-            name=helm_release['name'],
-            version=helm_release['version'])
+            repository=helm_release.software_images['repository'],
+            name=helm_release.software_images['name'],
+            version=helm_release.software_images['version'])
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="MEC Application could not be instantiated.")
-    db.app_instances_info.update_one(
-        {'_id': ObjectId(appInstanceId)},
-        {"$set": {"instantiationState": InstantiationState.STANTIATED.value}})
+    else:
+        db.app_instances_info.update_one(
+            {'_id': ObjectId(appInstanceId)},
+            {"$set": {"instantiationState": InstantiationState.STANTIATED.value}})
 
 
 @app.post("/app_lcm/v1/app_instances/{appInstanceId}/terminate",
@@ -171,10 +173,11 @@ async def terminate_app_instance(
     appDId = app_instance_info.get('appDId')
     helm_release = get_helm_release(appDId)
     try:
-        delete_release(name=helm_release['name'])
+        delete_release(name=helm_release.app_name)
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="MEC Application could not be instantiated.")
-    db.app_instances_info.update_one(
-        {'_id': ObjectId(appInstanceId)},
-        {"$set": {"instantiationState": InstantiationState.NOT_STANTIATED.value}})
+    else:
+        db.app_instances_info.update_one(
+            {'_id': ObjectId(appInstanceId)},
+            {"$set": {"instantiationState": InstantiationState.NOT_STANTIATED.value}})
