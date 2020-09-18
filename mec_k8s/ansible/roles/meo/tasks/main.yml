@@ -7,9 +7,24 @@
 
   - name: Ensure MongoDB service is running
     service:
-      name: mongod
+      name: mongodb
       state: started
+
+  - name: Copy FastAPI app code
+    copy:
+      src: "app"
+      dest: "/root/"
+
+  - name: Install Pip3
+    package: 
+      name: python3-pip
+      state: present
+      update_cache: true
 
   - name: Install FastAPI and dependencies
     pip:
-      requirements: "../files/requirements.txt"
+      requirements: "/root/app/requirements.txt"
+      executable: "/usr/bin/pip3"
+
+  - name: Run Uvicorn web server in background
+    shell: "uvicorn main:app --reload --host 0.0.0.0 --port 80 &> /var/log/uvicorn.log &"
