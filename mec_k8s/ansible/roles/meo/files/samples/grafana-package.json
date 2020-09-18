@@ -1,0 +1,13 @@
+{
+    "appPkgName": "grafana",
+    "appPkgVersion": "5.6.6",
+    "appProvider": "grafana",
+    "userDefinedData": {
+        "service": {
+            "type": "LoadBalancer"
+        },
+        "adminUser" : "luis",
+        "adminPassword": "giros"
+    },
+    "appPkgPath": "https://grafana.github.io/helm-charts"
+  }
