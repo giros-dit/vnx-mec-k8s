@@ -18,9 +18,8 @@ db = client.mepm
 
 # MongoDB operations
 def delete_app_instance_info(appInstanceId: str):
-    app_instance_info = db.app_instances_info.delete_one(
+    db.app_instances_info.delete_one(
                     {'_id': ObjectId(appInstanceId)})
-    return app_instance_info
 
 
 def get_app_instance_info(appInstanceId: str):
