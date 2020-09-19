@@ -25,6 +25,20 @@
     pip:
       requirements: "/root/app/requirements.txt"
       executable: "/usr/bin/pip3"
+    
+  - name: Install supervisor
+    package: 
+      name: supervisor
+      state: present
+      update_cache: true
 
-  - name: Run Uvicorn web server in background
-    shell: "uvicorn main:app --reload --host 0.0.0.0 --port 80 &> /var/log/uvicorn.log &"
+  - name: Copy uvicorn config for supervisor
+    template:
+      src: uvicorn.conf.j2
+      dest: /etc/supervisor/conf.d/uvicorn.conf
+
+  - name: Reread supervisor
+    command: supervisorctl reread
+
+  - name: Update supervisor
+    command: supervisorctl update 

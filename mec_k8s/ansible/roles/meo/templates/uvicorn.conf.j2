@@ -1,0 +1,8 @@
+[fcgi-program:uvicorn]
+socket=tcp://0.0.0.0:80
+directory=/root/app
+command=uvicorn --fd 0 main:app --port 80 --host 0.0.0.0
+numprocs=4
+process_name=uvicorn-%(process_num)d
+stdout_logfile=/var/log/uvicorn.log
+stdout_logfile_maxbytes=0
