@@ -56,7 +56,7 @@ ssh k8s-worker1
 ssh r1
 
 # MEC Orchestrator (MEO)
-ssh MEO
+ssh meo
 ```
 
 Once VNX has finished creating the virtual scenario, run the following Ansible playbook to setup a Kubernetes cluster on the MEC Host nodes:

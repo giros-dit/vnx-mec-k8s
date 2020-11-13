@@ -3,7 +3,7 @@
     pre_tasks:
       - name: Make sure eth9 gets IP
         shell: dhclient eth9
-    roles: 
+    roles:
       - bird
     tags: bird
 
@@ -33,8 +33,8 @@
 
   - hosts: k8s-cluster
     roles:
-      - helmec
-    tags: helmec
+      - helmmec
+    tags: helmmec
 
   - hosts: meo
     roles:

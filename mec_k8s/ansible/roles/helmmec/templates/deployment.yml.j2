@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helmec-deployment
+  name: helmmec-deployment
   labels:
-    app: helmec
+    app: helmmec
 spec:
   selector:
     matchLabels:
-      app: helmec
+      app: helmmec
   template:
     metadata:
       labels:
-        app: helmec
+        app: helmmec
     spec:
-      serviceAccount: helmec
+      serviceAccount: helmmec
       containers:
-      - name: helmec
-        image: localhost:5000/helmec
+      - name: helmmec
+        image: localhost:5000/helmmec
         imagePullPolicy: Always
         ports:
         - containerPort: 80

@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: helmec-svc
+  name: helmmec-svc
   labels:
-    app: helmec
+    app: helmmec
 spec:
   type: LoadBalancer
   ports:
     - port: 80
       protocol: TCP
   selector:
-    app: helmec
+    app: helmmec

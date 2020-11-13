@@ -2,9 +2,9 @@
 - name: Copy FastAPi libraries
   copy:
     src: "../files/"
-    dest: "./helmec"
+    dest: "./helmmec"
   when:
-    - "inventory_hostname == groups['kube-node'][0]"  
+    - "inventory_hostname == groups['kube-node'][0]"
 
 - name: Install pip
   apt:
@@ -13,35 +13,35 @@
     name:
     - python-pip
   when:
-    - "inventory_hostname == groups['kube-node'][0]"  
+    - "inventory_hostname == groups['kube-node'][0]"
 
 - name: Install Python Docker SDK
   pip:
     name: docker-py
   when:
-    - "inventory_hostname == groups['kube-node'][0]"  
+    - "inventory_hostname == groups['kube-node'][0]"
 
-- name: Tag and push Helmec image to local registry
+- name: Tag and push helmmec image to local registry
   docker_image:
-    name: localhost:5000/helmec
+    name: localhost:5000/helmmec
     push: yes
     source: build
     force_source: yes
     build:
-      path: "./helmec"
+      path: "./helmmec"
   when:
-    - "inventory_hostname == groups['kube-node'][0]"  
+    - "inventory_hostname == groups['kube-node'][0]"
 
-- name: Kubernetes Apps | Lay Down helmec manifests
+- name: Kubernetes Apps | Lay Down helmmec manifests
   template: { src: "{{ item }}.j2", dest: "{{ kube_config_dir }}/{{ item }}" }
   with_items: ["rbac.yml", "deployment.yml", "svc.yml"]
   register: "rendering"
   when:
     - "inventory_hostname == groups['kube-master'][0]"
 
-- name: Kubernetes Apps | Install and configure RBAC for helmec
+- name: Kubernetes Apps | Install and configure RBAC for helmmec
   kube:
-    name: "Helmec rbac"
+    name: "helmmec rbac"
     kubectl: "{{ bin_dir }}/kubectl"
     filename: "{{ kube_config_dir }}/{{ item.item }}"
     state: "{{ item.changed | ternary('latest','present') }}"

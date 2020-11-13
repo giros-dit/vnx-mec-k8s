@@ -12,8 +12,8 @@ Description: KVM-based scenario that sets up a two-node Kubernetes (k8s) cluster
 
              LXC containers are utilized to emulate router r1 and MEC orchestrator (MEO).
 
-This file is part of the Virtual Networks over LinuX (VNX) Project distribution. 
-(www: http://www.dit.upm.es/vnx - e-mail: vnx@dit.upm.es) 
+This file is part of the Virtual Networks over LinuX (VNX) Project distribution.
+(www: http://www.dit.upm.es/vnx - e-mail: vnx@dit.upm.es)
 
 Departamento de Ingenieria de Sistemas Telematicos (DIT)
 Universidad Politecnica de Madrid
@@ -25,7 +25,7 @@ SPAIN
   xsi:noNamespaceSchemaLocation="/usr/share/xml/vnx/vnx-2.00.xsd">
   <global>
     <version>2.0</version>
-    <scenario_name>tutorial_kubespray</scenario_name>
+    <scenario_name>mec_k8s</scenario_name>
     <ssh_key>./conf/ssh/id_rsa.pub</ssh_key>
     <automac/>
     <vm_mgmt type="private" network="192.168.50.0" mask="24" offset="16">
