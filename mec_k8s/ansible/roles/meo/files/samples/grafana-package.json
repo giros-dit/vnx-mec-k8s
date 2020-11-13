@@ -6,8 +6,9 @@
         "service": {
             "type": "LoadBalancer"
         },
-        "adminUser" : "luis",
-        "adminPassword": "giros"
+        "adminUser" : "go2edge",
+        "adminPassword": "go2edge"
     },
     "appPkgPath": "https://grafana.github.io/helm-charts"
   }
+
